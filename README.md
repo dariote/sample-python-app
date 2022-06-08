@@ -1,62 +1,28 @@
-# Sample containerized Python application
+# Sample containerized Python application to accomplish the following: 
 
-This repo contains a sample application to deploy to Kubernetes. The application is a simple HelloWorld app using Python and Flask framework.
+## procure infrastructure in GCP using terraform
+## deploy code to staging and master using Github actions 
 
-## Run with Docker
+1. running locally
+``` docker-compose up ```
 
-```bash
-$ docker build -f Dockerfile -t hello-python:latest .
+2. push code to master will trigger staging deployment
 
-$ docker run -it -p 5001:5001 --name hello_python hello-python:latest
+3. Adding a tag and pushing it will trigger a production deployment 
+``` eg. git tag v0.0.1  ```
+``` git push origin v0.0.1 ```
 
-# Docker Docs: https://docs.docker.com/
-# Docker Reference: https://docs.docker.com/reference/
-```
 
-## Run with Docker Compose
+## Sample app details:
 
-```bash
-$ docker-compose up hello_py_devl && docker-compose rm -fsv
+1. staging: http://34.132.223.213:5001/
+2. prod: http://35.194.28.63:5001/
+3. Application present in the following project: l-gs-gsrd-general
 
-# For additional instruction please see notes at the bottom
-# of docker-compose.yml file in the app root directory.
 
-# Docker compose docs: https://docs.docker.com/compose/
-```
-
-## Run with Python
-
-System Requirements: [Git](http://www.git-scm.com), [Python 3.8.0](https://www.python.org/downloads/)
-
-```bash
-# Check dependencies
-$ git --version
-git version 2.23.0
-
-$ python --version
-Python 3.8.0
-
-$ pip --version # pip comes as a part of python install
-pip 20.0.2 from /usr/local/lib/python3.8/site-packages/pip (python 3.8)
-
-# Clone the sourcecode
-$ git clone <repo url>
-$ cd <project dir>
-
-# Install project dependencies
-$ pip install -r requirements.txt
-
-# Run the application
-$ PORT=5001 python src/app.py
-
-# Check application
-$ curl http://localhost:5001/debug
-# (or)
-# In Browser visit -> http://localhost:5001/debug/ui
-```
-
-## Sample output
-
-Pointing your browser to <http://localhost:5001/debug/ui> will bring up the following:
-
-![](images/output.png)
+## Technologies
+1. Docker
+2. GCP vm instances
+3. Terraform
+4. Github actions
+5. GCP secret management
