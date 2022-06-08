@@ -1,7 +1,6 @@
 PROJECT_ID=l-gs-gsrd-general
 VM_PREFIX=python-devops-vm-
 USER_ID=terraform-sa
-# ENV=staging
 ZONE=us-central1-a
 
 #deployment variables
