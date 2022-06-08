@@ -1,7 +1,7 @@
 PROJECT_ID=l-gs-gsrd-general
 VM_PREFIX=python-devops-vm-
 USER_ID=terraform-sa
-ENV=staging
+# ENV=staging
 ZONE=us-central1-a
 
 #deployment variables
@@ -9,6 +9,11 @@ GITHUB_SHA?=latest
 LOCAL_TAG=hello-python:$(GITHUB_SHA)
 REMOTE_TAG=gcr.io/$(PROJECT_ID)/$(LOCAL_TAG)
 CONTAINER_NAME=hello-python
+
+check-env:
+ifndef ENV
+	$(error Please set ENV=[staging|prod])
+endif
 
 
 #Secret helper
@@ -29,13 +34,13 @@ terraform-init:
 		terraform init
 
 
-terraform-create-workspace:
+terraform-create-workspace: check-env
 	cd terraform && \
 		terraform workspace new $(ENV) && \ 
 			terraform init 
 
 TF_ACTION?=plan
-terraform-action:
+terraform-action: check-env
 	@cd terraform && \
 		terraform workspace select $(ENV) && \
 		terraform $(TF_ACTION) \
@@ -45,12 +50,12 @@ terraform-action:
 
 SSH_STRING=$(USER_ID)@$(VM_PREFIX)$(ENV)
 
-ssh:
+ssh: check-env 
 	gcloud compute ssh $(SSH_STRING) \
 		--project=$(PROJECT_ID) \
 		--zone=$(ZONE)
 
-ssh-cmd:
+ssh-cmd: check-env
 	@gcloud compute ssh $(SSH_STRING) \
 		--project=$(PROJECT_ID) \
 		--zone=$(ZONE) \
@@ -63,7 +68,7 @@ push:
 	docker tag $(LOCAL_TAG) $(REMOTE_TAG)
 	docker push $(REMOTE_TAG)
 
-deploy:
+deploy: check-env
 	$(MAKE) ssh-cmd CMD='docker-credential-gcr configure-docker'
 	@echo "pulling new container image..."
 	$(MAKE) ssh-cmd CMD='docker pull $(REMOTE_TAG)'

@@ -4,8 +4,8 @@ on:
   push:
     branches:
       - "master"
-    # tags:
-    #     - v\d+\.\d+\.\d+
+    tags:
+        - v\d+\.\d+\.\d+
 env:
   PROJECT_ID: l-gs-gsrd-general
 

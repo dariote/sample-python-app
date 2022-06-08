@@ -17,15 +17,15 @@ data "google_compute_network" "default" {
   name = "default"
 }
 
-resource "google_compute_network" "default" {
-  name = "default"
-  auto_create_subnetworks = true
-  description = "Default network for the project"
-}
+# resource "google_compute_network" "default" {
+#   name = "default"
+#   auto_create_subnetworks = false
+#   description = "Default network for the project"
+# }
 #FIREWALL RULE
 resource "google_compute_firewall" "allow-http" {
   name    = "allow-http-${terraform.workspace}"
-  network = google_compute_network.default.name
+  network = data.google_compute_network.default.name
 
 #   allow {
 #     protocol = "icmp"
@@ -36,6 +36,7 @@ resource "google_compute_firewall" "allow-http" {
     ports    = ["80"]
   }
 
+  source_ranges = ["0.0.0.0/0"]
   target_tags = ["allow-http-${terraform.workspace}"]
 }
 
